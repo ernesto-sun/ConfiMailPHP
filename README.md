@@ -84,7 +84,7 @@ Note: All the following code examples are put together at demo.htm
 
 ```
 
-Note: You might have to adapt the src-arguments to point to _3p/securimage/
+Note: You might have to adapt the src-arguments to point to _3p/securimage/ wherever it is at your server. 
 
 
 #### The Captcha Input:
@@ -98,7 +98,7 @@ Note: You might have to adapt the src-arguments to point to _3p/securimage/
 
 ```
 
-Note: It is required to have the name='captcha-code' and to have this input within a <form> element. 
+Note: It is required to have the name='captcha-code' and to have this input within a form-element. 
 
 
 #### Your Form Submit
