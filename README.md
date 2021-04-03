@@ -1,7 +1,7 @@
 # Confi Mail PHP
 
 A 'kind of safe' simple script for one purpose: 
-Sending any text-message to any email-adress of choice.
+Sending any text-message to any email-address of choice.
 
 This is useful e.g. for contact forms. This project is ment to help you make your online contact form on your own website work in little time.
 
