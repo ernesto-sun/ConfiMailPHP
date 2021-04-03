@@ -57,11 +57,152 @@ Change the API-Key at the top of config_script.php itself.
 
 Execute the config_script.php with your API key. 
 
-For more infos about Config Management see: [Confi Config PHP](https://github.com/ernesto-sun/ConfiConfigPHP) 
+For more info about Config Management see: [Confi Config PHP](https://github.com/ernesto-sun/ConfiConfigPHP) 
 
 If all is set up well, you can try 'demo.htm' on your own server.
 
 IMPORTANT: Inside the folder '_3p' must be the folders 'PHPMailer' and 'securimage'. Not all of the third-party code but some of it. The versions of these two projects, stored within this repository, are only for your reference to know, what files are necessary.
+
+
+### Using Confi Mail PHP
+
+Install ConfiMailPHP and know the URL. E.g.: https://yourserver.com/ConfiMailPHP
+
+At your website of choice, make your own contact-form and add the following two snippets.
+
+Note: All the following code examples are put together at demo.htm  
+
+
+#### The Captcha Image:
+
+```
+
+    <img class='captcha-image' src='_3p/securimage/securimage_show.php' alt='Captcha Image' />
+    <a class='captcha-reload' href='#' onclick='this.closest("form").querySelector("img.captcha-image").src="_3p/securimage/securimage_show.php?"+Math.random();event.preventDefault();'>
+    <span>Different image</span>
+    </a>
+
+```
+
+Note: You might have to adapt the src-arguments to point to _3p/securimage/
+
+
+#### The Captcha Input:
+
+
+```
+
+    <input type='text' name='captcha-code' 
+        size='6' minlength='6' maxlength='6' required='required'
+        placeholder='Code' autocomplete="off" value =""/>
+
+```
+
+Note: It is required to have the name='captcha-code' and to have this input within a <form> element. 
+
+
+#### Your Form Submit
+
+Your contact-form needs to run JavaScript code at the onsubmit-event. You need to write your own function to validate your own form and to combine the complete message into one string, just as you like it to be sent to your email.
+
+This can look like this:
+
+```
+
+<form action="#" method='POST' onsubmit="SEND.call(this, event)">
+...
+
+```
+
+and within your JavaScript:
+
+```
+
+function SEND(e)  
+{
+    e.preventDefault();
+
+    var dform = this,
+        subject = dform["subject"].value, 
+        message = dform["message"].value, 
+        data = {subject: subject, message: message},
+        msg = JSON.stringify(data);
+    ...
+
+```
+
+
+#### The Effective Sending
+
+Having the URL to your ConfiMailPHP-installation, the form-data as one string, and the captcha-code, we can call the one function that does all the rest. 
+
+```
+    ...
+    const captcha = dform['captcha-code'].value,
+          url = "https://yourserver.com/ConfiMailPHP";
+
+
+    ConfiMailPHP(url, captcha, msg).then((ok) => 
+    {
+        if(ok == 1)
+        {
+            console.log("MAIL sending done.");
+        }
+        else
+        {
+            console.log("Wrong captcha input!");  
+        }
+
+    }, (ex) =>
+    {
+        console.error("Mail sending failed. Check the system! Info: ", ex);
+    });
+
+
+```
+
+
+#### The Function
+
+And, of course, the function ConfiMailPHP must be defined somewhere.
+
+```
+
+function ConfiMailPHP(url, cap, msg) 
+{ 
+    return new Promise(function(ok, no)
+    {
+        var r = Math.round(Math.random() * 1998000000) + 2000000,
+            ids = "captcha-script-sys",
+            ds = document.getElementById(ids);    
+        if(ds) ds.parentNode.removeChild(ds);
+        document.body.appendChild(ds = document.createElement("script"));
+        ds.id = ids;
+        ds.onload = () => 
+        { 
+            if(typeof _MAIL_err_cap == "undefined") no("ConfiMailPHP system failure!");
+            if(_MAIL_err_cap == 0)
+            {
+                _MAIL_send(msg, r).then((b) =>
+                {
+                    if(b == 1) ok(1);
+                    else no("Function _MAIL_send() failed. Check the system!");
+                }); 
+            }
+            else
+            {
+                if(_MAIL_err_cap == 1) ok(0);
+                else no("Mail sending failed. Check the system!");
+            }
+        }
+        ds.setAttribute("src", url + "/mail_script.php?r=" + r + "&c=" + cap);
+    });
+}   
+
+
+```
+
+Thats it! 
 
 
 ### Debugging

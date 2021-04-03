@@ -213,8 +213,9 @@ more at <a href='http://github.com/ernesto-sun/Confi-Config-PHP'>GitHub</a>.</p>
     <label for="contact-form-captcha-code"  style='display:none'><b>Code</b></label>
 
     <!-- BEGIN Recommended Code for Captcha-Code-Input. IMPORTANT: Attribute required: name='captcha-code' !!! -->
-    <input id='contact-form-captcha-code' type='text' name='captcha-code' size='6' minlength='6' maxlength='6' required='required'
-             placeholder='Code' autocomplete="off" value =""/>
+    <input id='contact-form-captcha-code' type='text' name='captcha-code' 
+        size='6' minlength='6' maxlength='6' required='required'
+        placeholder='Code' autocomplete="off" value =""/>
     <!-- END -->
 
 </div>
@@ -295,7 +296,7 @@ function SEND(e)
 
 
 // ---------------------------------------------------------------------------
-function ConfiMailPHP(url, cap, msg)      // The one sending function 
+function ConfiMailPHP(url, cap, msg) 
 { 
     return new Promise(function(ok, no)
     {
