@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>
+Confi Mail PHP
+</title>
+<style>
+
+body
+{
+background:transparent;
+font-family: Verdana, Arial, sans-serif; 
+font-weight:normal;
+font-variant:normal;
+font-stretch:normal;
+text-decoration:none;
+text-transform:none;
+text-shadow:0;
+min-height:100vh;
+display: flex;
+flex-direction:column;
+margin:0;
+padding:0;
+top:0;
+left:0;
+}
+
+body,header,main,section,footer,div,img,h1,h2,h3,h4
+{
+position: relative;
+margin: 0;
+padding: 0;
+border: 0;
+outline: 0;
+box-sizing: border-box;
+overflow: visible;
+vertical-align: top;
+}
+
+html, body
+{
+overscroll-behavior-x: none; 
+-ms-overflow-style: none;
+scrollbar-width: none;
+overflow: -moz-scrollbars-none;
+width:100%;
+height:100%;
+}
+
+h1,h2,h3,h4 
+{ 
+font-weight:bolder; 
+margin-bottom:0.3em;
+}
+
+
+main
+{
+padding-left:0.5em;    
+}
+
+#contact-form
+{
+margin-top:2em;
+}
+
+#contact-form label
+{
+display:inline-block;
+min-width:14em;    
+}
+
+
+#contact-form button
+{
+font-size:1.4em;
+padding:0.2em 4em;
+border-radius:0.2em;
+margin-top:1em;
+}
+
+#contact-form textarea
+{
+display:block;
+width:100%;
+max-width:30em;
+min-height: 6em;
+font-family: Verdana, Arial, sans-serif; 
+}
+
+#contact-form input,
+#contact-form select,
+#contact-form textarea
+{
+font-size:1.4em;
+}
+
+#contact-form form
+{
+margin-top:1em;
+}
+
+#contact-form form > div
+{
+margin-top:0.5em;
+}
+
+#contact-form .captcha-image-area
+{
+display:flex;
+flex-direction:row;
+flex-wrap:wrap;
+align-items: baseline;    
+}
+
+#contact-form .captcha-image
+{
+height:6em;
+width:auto;
+}
+
+button
+{
+cursor:pointer;    
+}
+
+.hide
+{
+display:none;
+}
+
+.red
+{
+color:red;    
+}
+
+
+.green
+{
+color:green;    
+}
+
+</style>
+
+</head>
+<body>
+<header id='top'>
+<h1>Confi Mail PHP</h1>
+</header>
+<main>
+
+<section id='home'>
+<header>
+<h2>Hello User!</h2>
+</header>
+<div>
+<p>This is a little demo with a contact form for testing. See
+more at <a href='http://github.com/ernesto-sun/Confi-Config-PHP'>GitHub</a>.</p> 
+</div>     
+</section>
+
+<section id='contact-form'>
+<header>
+<h2>Demo Contact Form</h2>
+</header>
+<div>
+
+
+<div id='msg-ok' class='green hide'><span>Your message was sent successfully!</span></div>
+
+<div id='msg-sys-err' class='red hide'><span>Sorry! The mail system failed! Please contact the admin.</span></div>
+
+<!-- Note: The form-submit-event must be directed to JS. Can also be done by addEventListener() -->    
+<form id="contact-form-form" action="#" method='POST' onsubmit="SEND.call(this, event)">
+
+<div class="txt-subject">
+    <label for="contact-form-txt-subject"><b>Subject</b></label>
+    <input id="contact-form-txt-subject" name="txt-subject" value="Test Subject" maxlength="63" type="text" />
+</div>
+
+<div class="com-topic">
+    <label for="contact-form-com-topic"><b>Topic</b></label>
+    <select id="contact-form-com-topic" name="com-topic" value="">
+        <option class="option-zero" value="" selected="selected"></option>
+        <option value="request">Request</option>
+        <option value="question">Question</option>
+    </select>
+</div>
+
+<div class="txt-message">
+    <label for="contact-form-txt-message"><b>Your message</b></label>
+    <textarea id="contact-form-txt-message" name="txt-message">Write your message here...</textarea>
+</div>
+
+<h4 style='margin-top:1em;'>Security Question</h4>
+    
+<div id='captcha-err' class='red hide'><span>Code failed. Please try again.</span></div>
+
+<div class='captcha-image-area'>
+
+    <!-- BEGIN Recommended Code for Captcha-Image -->
+    <img class='captcha-image' src='_3p/securimage/securimage_show.php' alt='Captcha Image' />
+    <a class='captcha-reload' href='#' onclick='this.closest("form").querySelector("img.captcha-image").src="_3p/securimage/securimage_show.php?"+Math.random();event.preventDefault();'>
+    <span>Different image</span>
+    </a>
+    <!-- END -->
+
+</div>
+
+<div class='captcha-input'>
+    <label for="contact-form-captcha-code"  style='display:none'><b>Code</b></label>
+
+    <!-- BEGIN Recommended Code for Captcha-Code-Input. IMPORTANT: Attribute required: name='captcha-code' !!! -->
+    <input id='contact-form-captcha-code' type='text' name='captcha-code' size='6' minlength='6' maxlength='6' required='required'
+             placeholder='Code' autocomplete="off" value =""/>
+    <!-- END -->
+
+</div>
+
+<button id="contact-form-but-send"><span>Send</span></button>
+
+</form>
+
+
+</div>        
+</section>
+
+</main>
+
+<footer style='padding-top:4em;'>
+    <div id='footer-copyright'><span>(c) 2021 Ernesto Sun</span></div>
+</footer>
+
+<script>
+
+// ---------------------------------------------------------------------------
+function SEND(e)  
+{
+    e.preventDefault();
+
+    var dform = this;  // 'this' is valid (only) if function F is called by addEventListener("submit",F) or by onsubmit="F.call(this, event)"
+    // Read form inputs
+    var dsubject = document.getElementById("contact-form-txt-subject"),
+    subject = dsubject.value, 
+    dtopic = document.getElementById("contact-form-com-topic"),
+    topic = dtopic.value, 
+    dmessage = document.getElementById("contact-form-txt-message"),
+    message = dmessage.value;
+
+    // Build the complete message into one string (here JSON-string)     
+
+    const captcha = dform['captcha-code'].value,
+          url = ".",
+          msg = JSON.stringify({subject: subject, topic: topic, message: message});
+
+    document.getElementById("msg-ok").classList.add("hide");
+
+    ConfiMailPHP(url, captcha, msg).then((ok) => 
+    {
+        if(ok == 1)
+        {
+            console.log("MAIL sending done.");
+
+            document.getElementById("captcha-err").classList.add("hide");
+            var d;
+            for(d of document.querySelectorAll('input, textarea, select')) d.value = "";  // clear form
+            for(d of document.querySelectorAll(".captcha-reload")) d.dispatchEvent(new Event("click"));
+            document.getElementById("msg-ok").classList.remove("hide");
+            setTimeout(() => 
+            { 
+                document.getElementById("msg-ok").classList.add("hide");
+            }, 5000);  
+        }
+        else
+        {
+            console.log("Wrong captcha input!");  
+
+            document.getElementById("captcha-err").classList.remove("hide");
+            document.querySelector('input[name="captcha-code"]').focus();  // takes the first
+            setTimeout(() => 
+            { 
+                document.getElementById("captcha-err").classList.add("hide");
+            }, 10000);  
+        }
+
+    }, (ex) =>
+    {
+        console.error("Mail sending failed. Check the system! Info: ", ex);
+
+        document.getElementById("msg-sys-err").classList.remove("hide");
+    });
+}
+
+
+// ---------------------------------------------------------------------------
+function ConfiMailPHP(url, cap, msg)      // The one sending function 
+{ 
+    return new Promise(function(ok, no)
+    {
+        var r = Math.round(Math.random() * 1998000000) + 2000000,
+            ids = "captcha-script-sys",
+            ds = document.getElementById(ids);    
+        if(ds) ds.parentNode.removeChild(ds);
+        document.body.appendChild(ds = document.createElement("script"));
+        ds.id = ids;
+        ds.onload = () => 
+        { 
+            if(typeof _MAIL_err_cap == "undefined") no("ConfiMailPHP system failure!");
+            if(_MAIL_err_cap == 0)
+            {
+                _MAIL_send(msg, r).then((b) =>
+                {
+                    if(b == 1) ok(1);
+                    else no("Function _MAIL_send() failed. Check the system!");
+                }); 
+            }
+            else
+            {
+                if(_MAIL_err_cap == 1) ok(0);
+                else no("Mail sending failed. Check the system!");
+            }
+        }
+        ds.setAttribute("src", url + "/mail_script.php?r=" + r + "&c=" + cap);
+    });
+}   
+
+
+// ---------------------------------------------------------------------------
+function INIT()
+{
+    document.getElementById("contact-form-txt-subject").focus();
+}
+
+// ---------------------------------------------------------------------------
+if (document.readyState != 'loading') INIT();
+else document.addEventListener('DOMContentLoaded', INIT);
+
+</script>
+
+</body>
+</html>
