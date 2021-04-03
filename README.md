@@ -1,15 +1,24 @@
 # Confi Mail PHP
 
-A SaaS that is based on the legendary Open Source project PHPMailer.
+A 'kind of safe' simple script for one purpose: 
+Sending any text-message to any email-adress of choice.
 
-See: [PHPMailer at GitHub](https://github.com/PHPMailer/PHPMailer). 
+This is useful e.g. for contact forms. This project is ment to help you make your online contact form on your own website work in little time.
 
 *Confi Mail PHP* is Open Source.
+
+This kind of Microservice, SaaS, or API, combines 3 projects:
+
+* [SecurImage Captcha](https://www.phpcaptcha.org/)
+* [PHPMailer Mailing System](https://github.com/PHPMailer/PHPMailer) 
+* [Confi Config PHP](https://github.com/ernesto-sun/ConfiConfigPHP) 
+
+See a live demo here: https://exa.run/ConfiMailPHP/demo.htm
 
 
 ## Why this project?
 
-Easy to configure, easy to unleash some of the power, the great PHPMailer
+Easy to configure, easy to unleash some of the power the PHPMailer
 gives us. Well, E-Mailing is easy but not as easy as you think, specially
 if you want some degree of privacy and security from hacker attacks. 
 
