@@ -232,8 +232,8 @@ timestamps to identify versions. Such as '20201221' for 21. Dec, 2020.
 * Improve security
 * Improve mailing features (HTML, Attachments, ...)
 * Limit maximum message size.
+* Play with CORS (access from different context)
 * Testing, testing, testing, ...
-
 
 ## Authors
 

@@ -71,7 +71,10 @@ function err_cap($wrong)
     @error_log('Captcha failed: '.$wrong.' Correct: '.$cor.'  Agent: '.AGENT_INFO_STR());
     echo 'var _MAIL_err_cap=1, d;';
     echo 'for(d of document.querySelectorAll(".captcha-reload")) d.dispatchEvent(new Event("click"));';
-    echo 'for(d of document.querySelectorAll(\'input[name="captcha-code"]\'))d.value = ""';
+    echo 'for(d of document.querySelectorAll(\'input[name="captcha-code"]\'))d.value = "";';
+
+    // echo 'console.log("AHA: ", "', str_replace('"', '\'', var_export($_SESSION, true)), '");';
+
     usleep(rand(50000,100000));  // thats between 50ms and 100ms 
     ob_end_flush();
     die();
