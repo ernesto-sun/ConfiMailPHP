@@ -34,7 +34,7 @@ electronic messaging.
 
 ## Who is it for?
 
-Confi Config PHP is made for developers, hackers, coders, website makers, etc. 
+Confi Mail PHP is made for developers, hackers, coders, website makers, etc. 
 
 
 ## Getting Started
@@ -68,7 +68,7 @@ IMPORTANT: Inside the folder '_3p' must be the folders 'PHPMailer' and 'securima
 
 Install ConfiMailPHP and know the URL. E.g.: https://yourserver.com/ConfiMailPHP
 
-At your website of choice, make your own contact-form and add the following two snippets.
+At your website of choice, make your own contact-form and add the following snippets.
 
 Note: All the following code examples are put together at demo.htm  
 
