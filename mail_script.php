@@ -210,7 +210,7 @@ async function _MAIL_send(msg, r0, lang)
 {
     try 
     {
-        if(typeof lang != "string" || land.length != 2) lang = "en";  // Language fallback to English
+        if(typeof lang != "string" || lang.length != 2) lang = "en";  // Language fallback to English
 
         const url = <?php echo "'", $url, "'";?>,
             rx = _MAIL_rint(), 
