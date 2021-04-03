@@ -1,6 +1,6 @@
 <?php
 
-define("API_KEY",   "jkhsd7623jhgajhsdg2q");   // Change and use the API_KEY e.g.: http://.../config_script.php?ak=API_KEY
+define("API_KEY",   "hjsjhs87s87shmnm2m2n2");   // Change and use the API_KEY e.g.: http://.../config_script.php?ak=API_KEY
 
 define("PATH_HARDCODED",  "");   // Absolute Path! Leave empty to make script search for a path  // TODO: Detect and allow relative path for PATH_HARDCODED 
 
