@@ -91,10 +91,9 @@ Note: You might have to adapt the src-arguments to point to _3p/securimage/ wher
 
 
 ```
-
-    <input type='text' name='captcha-code' 
-        size='6' minlength='6' maxlength='6' required='required'
-        placeholder='Code' autocomplete="off" value =""/>
+    <input type="text" name="captcha-code" 
+        size="6" minlength="6" maxlength="6" required="required"
+        placeholder="Code" autocomplete="off" autocapitalize="off" value=""/>
 
 ```
 
