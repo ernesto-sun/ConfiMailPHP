@@ -10,7 +10,7 @@ $set_config = array(
   'smtp_port' =>      465,    
   'smtp_user' =>      '',         // The password is in conig_set_sec.php
 
-  'email_to' =>       'contact@yourserver.com',      // Note: Only with AUTH other email-targets can be sent to
+  'email_to' =>       'contact@yourserver.com',     
   'name_to' =>        'Contact',    
 
   'email_from' =>     '',    
