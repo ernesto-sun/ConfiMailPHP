@@ -44,13 +44,13 @@ function AGENT_INFO_STR()
 // --------------------------------------------------------------
 function err($msg)
 {
-    if($GLOBALS['debug']) echo 'ERROR: ',$msg;
     @error_log(TIMESTAMP().': ERROR: '.$msg);
     @error_log('AGENT: '.AGENT_INFO_STR());
     $ts = MS() - $GLOBALS['sts'];
     @error_log('Script Runtime: '.$ts.'ms');
     @session_destroy();
     usleep(rand(100000, 300000));  // thats between 100ms and 300ms 
+    if($GLOBALS['debug']) echo 'ERROR: ',$msg;
     die();
 }
 

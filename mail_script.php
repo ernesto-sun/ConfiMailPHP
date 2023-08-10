@@ -45,7 +45,6 @@ function AGENT_INFO_STR()
 // --------------
 function err($msg)
 {
-    if($GLOBALS['debug']) echo 'ERROR: ',$msg;
     @error_log(TIMESTAMP().': ERROR: '.$msg);
     @error_log('AGENT: '.AGENT_INFO_STR());
     $ts = MS() - $GLOBALS['sts'];
@@ -53,6 +52,7 @@ function err($msg)
     @session_destroy();
     usleep(rand(100000,300000));  // thats between 100ms and 300ms 
     ob_end_clean();
+    if($GLOBALS['debug']) echo 'ERROR: ',$msg;
     die();
 }
 
@@ -60,20 +60,20 @@ function err($msg)
 function err_cap($wrong)
 {
     $cor ='?';
-    if(isset($_SESSION['securimage_code_disp']))
+    if(isset($_SESSION['securimage_code_value']))
     {
-        if(isset($_SESSION['securimage_code_disp']['default']))
+        if(isset($_SESSION['securimage_code_value']['default']))
         {
-            $cor = $_SESSION['securimage_code_disp']['default'];
+            $cor = $_SESSION['securimage_code_value']['default'];
         }
     }
-    if($cor == '?') $cor = '?? '.var_export($_SESSION, true);
+    if($cor == '?') $cor = '?? ';
+    
+    $cor .= "SES: ".var_export($_SESSION, true);
     @error_log('Captcha failed: '.$wrong.' Correct: '.$cor.'  Agent: '.AGENT_INFO_STR());
     echo 'var _MAIL_err_cap=1, d;';
     echo 'for(d of document.querySelectorAll(".captcha-reload")) d.dispatchEvent(new Event("click"));';
     echo 'for(d of document.querySelectorAll(\'input[name="captcha-code"]\'))d.value = "";';
-
-    // echo 'console.log("AHA: ", "', str_replace('"', '\'', var_export($_SESSION, true)), '");';
 
     usleep(rand(50000,100000));  // thats between 50ms and 100ms 
     ob_end_flush();
@@ -99,15 +99,37 @@ if(''.$r != $_GET['r']) err('rs');
 
 if(!isset($_GET['c'])) err('c-p');
 $cap = $_GET['c'];
-if(strlen($cap) != 6) err('c-len');
-if(''.$cap != $_GET['c']) err('cap-s');
+$no_cap = 0;
+if(strlen($cap) != 1)  // only MATH_EASY is supported right now
+{
+    if(empty($cap) && 
+        $GLOBALS['config']['allow_no_captcha'])
+    {
+        $no_cap = 1;
+    }
+    else
+    {
+        err('c-len');
+    }
+}
 
 session_start();
 
-require '_3p/securimage/securimage.php';
-$securimage = new Securimage();
-if($securimage->check($cap) == false) err_cap($cap);
 
+if(!$no_cap)
+{
+    if(''.$cap != $_GET['c']) err('cap-s');
+
+    require '_3p/securimage/securimage.php';
+    $securimage = new Securimage();
+
+    if (!empty($_GET['namespace'])) /* HACK: eto 20210510 */
+    {
+        $securimage->setNamespace($_GET['namespace']);
+    }
+
+    if($securimage->check($cap) == false) err_cap($cap);
+}
 
 $_SESSION['_MAIL']['r0'] = $r;
 $_SESSION['_MAIL']['ts0'] = MS();

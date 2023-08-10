@@ -213,9 +213,9 @@ more at <a href='https://github.com/ernesto-sun/ConfiMailPHP'>GitHub</a>.</p>
     <label for="contact-form-captcha-code"  style='display:none'><b>Code</b></label>
 
     <!-- BEGIN Recommended Code for Captcha-Code-Input. IMPORTANT: Attribute required: name='captcha-code' !!! -->
-    <input id='contact-form-captcha-code' type='text' name='captcha-code' 
-        size='6' minlength='6' maxlength='6' required='required'
-        placeholder='Code' autocomplete="off" autocapitalize="off" value =""/>
+    <input id='contact-form-captcha-code' type='number' name='captcha-code' 
+        size='1' minlength='1' maxlength='1' min='2' max='9' step='1' required='required'
+        placeholder='Code' autocomplete="off" value =""/>
     <!-- END -->
 
 </div>

@@ -3,7 +3,7 @@
 header('Content-type: application/json');
 define('MODE_STRICT', 1);
 error_reporting(E_ALL | E_STRICT); 
-set_time_limit(2);  // can only run 2 seconds. Thats much anyway. PHPMailer has 1 sec timeout.
+set_time_limit(20);  // can only run 4 seconds. Thats much anyway. PHPMailer has 1 sec timeout.
 
 // One second PHPMailer timeout my seem strict, but if systems work well, 1 sec is a lot for one mail.
 // And if systems do not work well, better scripts don't run anyway. 
@@ -46,13 +46,13 @@ function AGENT_INFO_STR()
 // --------------
 function err($msg)
 {
-    if($GLOBALS['debug']) echo 'ERROR: ', $msg, '\n\r';
     @error_log(TIMESTAMP().': ERROR: '.$msg);
     @error_log('AGENT: '.AGENT_INFO_STR());
     $ts = MS() - $GLOBALS['sts'];
     @error_log('Script Runtime: '.$ts.'ms');
     @session_destroy();
     usleep(rand(100000, 300000));  // thats between 100ms and 300ms 
+    if($GLOBALS['debug']) echo 'ERROR: ', $msg, '\n\r';
     die();
 }
 
@@ -205,6 +205,74 @@ if(!$ok_ak)
 
     $msg = ''.$tok['m'];
     $info = AGENT_INFO_STR().'\r\nTS: '.TIMESTAMP();
+
+
+    // -------------------------------
+    // check for honeybot
+
+    $hb_got = 0;
+
+    $obj = json_decode($msg, true);
+    if(is_array($obj))
+    {
+        if(count($obj) > 1)
+        {
+            $hb = $obj[count($obj) - 1];
+            if(is_string($hb))
+            {
+                if(substr($hb, 0, 4) == "txt-")
+                {
+                    // seems we got an honeybot
+
+                    $obj2 = array();
+                    $hbv = '';
+
+                    foreach($obj as $row)
+                    {
+                        if(is_array($row))
+                        {
+                            if($row[0] == $hb)
+                            {
+                                $hb_got = 1;
+                                $hbv = $row[3];
+                            }
+                            else
+                            {
+                                $obj2[] = $row;   
+                            }
+                        }
+                    }
+
+                    $msg = json_encode($obj2);
+
+                    if($hb_got)
+                    {
+                        if(!empty($hbv))
+                        {
+                            important("HONEYBOT-Alert. Something entered: '{$hbv}' into '{$hb}'");
+                            $msg .= "\n\r\n\rHACKER ALERT!! Some script seems to have filled out the form.";
+                        }    
+                    }
+                    else
+                    {
+                        err("Could not find the honeybot value, even it looked like!");
+                    }            
+                }
+            }
+        }
+    } 
+
+
+    if(!$hb_got)
+    {
+        if(!$GLOBALS['config']['allow_no_honeybot'])
+        {
+            err("No honeybot given but required!");
+        }
+    }
+
+    // -------------------------------
+
 }
 
 // ---------------------------------------------------------------------------
