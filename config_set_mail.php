@@ -21,5 +21,8 @@ $set_config = array(
   'email_reply' =>    '',         // Keep empty to use email_from
   'name_reply' =>     '',         // Keep empty to use name_from
 
+   'allow_no_captcha' => 1,        // no captcha seems unsafe to script-attacks
+   'allow_no_honeybot' => 0,       // a honeybot can block primitive attacks  
+
 );
 
