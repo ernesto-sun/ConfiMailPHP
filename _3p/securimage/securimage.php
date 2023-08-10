@@ -282,6 +282,14 @@ class Securimage
     const SI_CAPTCHA_WORDS      = 2;
 
     /**
+     *  @20230806 Ernesto add new type
+     *
+     * @var int
+     */
+
+    const SI_CAPTCHA_MATHEMATIC_EASY = 3;
+
+    /**
      * MySQL option identifier for database storage option
      *
      * @var string
@@ -656,7 +664,7 @@ class Securimage
      * @see Securimage::$wordlist_file wordlist_file property
      * @var int
      */
-    public $captcha_type  = self::SI_CAPTCHA_STRING; // or self::SI_CAPTCHA_MATHEMATIC, or self::SI_CAPTCHA_WORDS;
+    public $captcha_type  = self::SI_CAPTCHA_STRING; // or self::SI_CAPTCHA_MATHEMATIC, or self::SI_CAPTCHA_WORDS, or SI_CAPTCHA_MATHEMATIC_EASY;
 
     /**
      * The captcha namespace used for having multiple captchas on a page or
@@ -2005,7 +2013,23 @@ class Securimage
     {
         $this->code = false;
 
-        switch($this->captcha_type) {
+        switch($this->captcha_type) 
+        {
+
+            case self::SI_CAPTCHA_MATHEMATIC_EASY:
+            {
+                /* HACK Ernesto Sun 20210509  make it super-easy, only + within 10 */
+
+                $left  = mt_rand(1, 5);
+                $right = mt_rand(1, 9 - $left);
+                $sign = '+';
+                $c = $left + $right;
+
+                $this->code         = "$c";
+                $this->code_display = "$left $sign $right =";
+                break;
+            }
+    
             case self::SI_CAPTCHA_MATHEMATIC:
             {
                 do {
@@ -2025,7 +2049,6 @@ class Securimage
                 $this->code_display = "$left $sign $right";
                 break;
             }
-
             case self::SI_CAPTCHA_WORDS:
                 $words = $this->readCodeFromFile(2);
                 $this->code = implode(' ', $words);

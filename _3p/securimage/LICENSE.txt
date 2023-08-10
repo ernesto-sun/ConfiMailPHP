@@ -1,3 +1,32 @@
+
+### 20230806 by Ernesto Sun
+
+The GitHub-project is defined as 'no longer maintained' by the user 'dapphp'. 
+
+The project-page automatically goes to a new branch called 'nextgen' and version 4.0.2. That branch
+seemms untested to me. I was not happy with trying to use it. API-changes and architecture-changes. 
+
+I deciced to keep with the well tested version 3.6.8. thats the latest in the 'master' branch. And,
+this encourages me to add one feature:
+
+----
+
+New feature: A new captcha-type among: SI_CAPTCHA_STRING and SI_CAPTCHA_MATHEMATIC and SI_CAPTCHA_WORDS
+
+The new type is called SI_CAPTCHA_MATHEMATIC_EASY and gives a very very simple math question as distorted picture
+
+$img->captcha_type = Securimage::SI_CAPTCHA_MATHEMATIC_EASY
+
+-----
+
+Will likely make some other changes in future and also make it fit for PHP 8.1 etc.
+ 
+    
+License of modified secureimage keeps BSD as defined at GitHub by user 'dapphp'.  	
+	
+
+---------------------
+
 COPYRIGHT:
     Copyright (c) 2011 Drew Phillips
     All rights reserved.
