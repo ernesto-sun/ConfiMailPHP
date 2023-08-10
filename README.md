@@ -36,6 +36,15 @@ electronic messaging.
 
 Confi Mail PHP is made for developers, hackers, coders, website makers, etc. 
 
+## Major Updates
+
+### 20230810 Ernesto   
+
+* Update of PHPMailer to latest version
+* Freezing to securimage version 3.6.8 and code-takeover
+* Secureimage Feature: SI_CAPTCHA_MATHEMATIC_EASY  (A very simple math-question)
+* Support for honeybot field (implemented with EXA-Form and Total.HTM)
+* Some minor bugfixes
 
 ## Getting Started
 
